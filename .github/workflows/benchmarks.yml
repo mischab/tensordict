@@ -33,9 +33,7 @@ jobs:
         with:
           name: Benchmark Results
           tool: 'pytest'
-          comment-on-alert: true
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json
           fail-on-alert: true
-          #alert-comment-cc-users: '@rhysd'
           

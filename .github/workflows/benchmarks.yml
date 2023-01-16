@@ -16,7 +16,8 @@ jobs:
       - name: Run benchmark
         run: |
           pip install tensordict-nightly
-          python setup.py develop
+          pip install pytest
+          pip install pytest-benchmark
           cd benchmarks/
           pytest pytree_benchmarks.py --benchmark-json output.json
       - name: Download previous benchmark data
@@ -27,6 +28,7 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
+          name: Benchmark Results
           tool: 'pytest'
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json

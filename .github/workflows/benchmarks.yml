@@ -4,9 +4,13 @@ on:
     branches: 
     - main
   workflow_dispatch:
+
+permissions:
+  deployments: write
+  contents: write
 jobs:
   benchmark:
-    name: Run pytest-benchmark benchmark
+    name: Pytest-benchmark
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,10 +20,9 @@ jobs:
       - name: Run benchmark
         run: |
           pip install tensordict-nightly
-          pip install pytest
-          pip install pytest-benchmark
+          pip install pytest pytest-benchmark
           cd benchmarks/
-          pytest pytree_benchmarks.py --benchmark-json output.json
+          pytest --benchmark-json output.json
       - name: Download previous benchmark data
         uses: actions/cache@v1
         with:
@@ -30,6 +33,9 @@ jobs:
         with:
           name: Benchmark Results
           tool: 'pytest'
+          comment-on-alert: true
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json
           fail-on-alert: true
+          #alert-comment-cc-users: '@rhysd'
+          

@@ -4,9 +4,13 @@ on:
     branches: 
     - main
   workflow_dispatch:
+
+permissions:
+  deployments: write
+  contents: write
 jobs:
   benchmark:
-    name: Run pytest-benchmark benchmark
+    name: Pytest-benchmark
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,6 +33,9 @@ jobs:
         with:
           name: Benchmark Results
           tool: 'pytest'
+          comment-on-alert: true
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json
           fail-on-alert: true
+          #alert-comment-cc-users: '@rhysd'
+          

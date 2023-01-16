@@ -36,4 +36,10 @@ jobs:
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json
           fail-on-alert: true
-          
+          alert-threshold: '200%'
+          comment-on-alert: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          gh-pages-branch: gh-pages-benchmark
+          auto-push: true
+
+    

@@ -28,6 +28,7 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
+          name: Benchmark Results
           tool: 'pytest'
           output-file-path: benchmarks/output.json
           external-data-json-path: ./cache/benchmark-data.json

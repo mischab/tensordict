@@ -34,7 +34,6 @@ jobs:
           name: Benchmark Results
           tool: 'pytest'
           output-file-path: benchmarks/output.json
-          external-data-json-path: ./cache/benchmark-data.json
           fail-on-alert: true
           alert-threshold: '200%'
           comment-on-alert: true

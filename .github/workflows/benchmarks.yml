@@ -1,4 +1,4 @@
-name: Benchmark main
+name: Continuous Benchmark
 on:
   push:
     branches: 
@@ -10,7 +10,7 @@ permissions:
   contents: write
 jobs:
   benchmark:
-    name: Pytest-benchmark
+    name: Pytest benchmark
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -23,15 +23,10 @@ jobs:
           pip install pytest pytest-benchmark
           cd benchmarks/
           pytest --benchmark-json output.json
-      - name: Download previous benchmark data
-        uses: actions/cache@v1
-        with:
-          path: ./cache
-          key: ${{ runner.os }}-benchmark
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: Benchmark Results
+          name: Push benchmark results to GitHub Pages
           tool: 'pytest'
           output-file-path: benchmarks/output.json
           fail-on-alert: true

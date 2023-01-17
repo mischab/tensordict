@@ -26,7 +26,7 @@ jobs:
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: Push benchmark results to GitHub Pages
+          name: Benchmark Results
           tool: 'pytest'
           output-file-path: benchmarks/output.json
           fail-on-alert: true

@@ -1,9 +1,9 @@
 name: Continuous Benchmark
 on:
-  push:
+  pull_request:
+    types: [ closed ]
     branches: 
     - main
-  workflow_dispatch:
 
 permissions:
   deployments: write
@@ -34,10 +34,12 @@ jobs:
           output-file-path: benchmarks/output.json
           fail-on-alert: true
           alert-threshold: '200%'
+          alert-comment-cc-users: '@vmoens,@tcbegley'
           comment-on-alert: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          gh-pages-branch: gh-pages-benchmark
+          gh-pages-branch: gh-pages
           auto-push: true
+
 
   benchmark_gpu:
     name: GPU Pytest benchmark
@@ -64,7 +66,6 @@ jobs:
       run: ldd --version
     - name: Checkout
       uses: actions/checkout@v3
-    # Update references
     - name: Update pip
       run: |
         apt-get install python3.8 python3-pip -y
@@ -104,9 +105,10 @@ jobs:
         output-file-path: benchmarks/output.json
         fail-on-alert: true
         alert-threshold: '200%'
+        alert-comment-cc-users: '@vmoens,@tcbegley'
         comment-on-alert: true
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        gh-pages-branch: gh-pages-benchmark
+        gh-pages-branch: gh-pages
         auto-push: true
 
     

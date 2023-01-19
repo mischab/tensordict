@@ -8,10 +8,11 @@ on:
 permissions:
   deployments: write
   contents: write
+
 jobs:
-  benchmark:
-    name: Pytest benchmark
-    runs-on: ubuntu-latest
+  benchmark_cpu:
+    name: CPU Pytest benchmark
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -20,13 +21,57 @@ jobs:
       - name: Run benchmark
         run: |
           pip install tensordict-nightly
-          pip install pytest pytest-benchmark
+          pip install pytest --rank 0 pytest-benchmark
           cd benchmarks/
           pytest --benchmark-json output.json
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
-          name: Benchmark Results
+          name: CPU Benchmark Results
+          tool: 'pytest'
+          output-file-path: benchmarks/output.json
+          fail-on-alert: true
+          alert-threshold: '200%'
+          comment-on-alert: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          gh-pages-branch: gh-pages-benchmark
+          auto-push: true
+
+  benchmark_gpu:
+    name: GPU Pytest benchmark
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        include:
+         - os: linux.4xlarge.nvidia.gpu
+           python-version: 3.9
+    defaults:
+      run:
+        shell: bash -l {0}
+    container: nvidia/cuda:11.8.0-cudnn8-devel-ubuntu18.04
+    steps:
+      - name: Install deps
+        run: |
+          apt-get update -y
+          apt-get install software-properties-common -y
+          add-apt-repository ppa:git-core/candidate -y
+          apt-get update -y
+          apt-get upgrade -y
+          apt-get -y install libglu1-mesa libgl1-mesa-glx libosmesa6 gcc curl g++ unzip wget libglfw3-dev libgles2-mesa-dev libglew-dev sudo git cmake libz-dev
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+      - name: Run benchmark
+        run: |
+          pip install tensordict-nightly
+          pip install pytest --rank 0 pytest-benchmark
+          cd benchmarks/
+          pytest --benchmark-json output.json
+      - name: Store benchmark result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: GPU Benchmark Results
           tool: 'pytest'
           output-file-path: benchmarks/output.json
           fail-on-alert: true

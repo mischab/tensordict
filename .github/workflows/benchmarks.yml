@@ -21,9 +21,9 @@ jobs:
       - name: Run benchmark
         run: |
           pip install tensordict-nightly
-          pip install pytest --rank 0 pytest-benchmark
+          pip install pytest pytest-benchmark
           cd benchmarks/
-          pytest --benchmark-json output.json
+          pytest --rank 0 --benchmark-json output.json
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:
@@ -65,9 +65,9 @@ jobs:
       - name: Run benchmark
         run: |
           pip install tensordict-nightly
-          pip install pytest --rank 0 pytest-benchmark
+          pip install pytest pytest-benchmark
           cd benchmarks/
-          pytest --benchmark-json output.json
+          pytest --rank 0 --benchmark-json output.json
       - name: Store benchmark result
         uses: benchmark-action/github-action-benchmark@v1
         with:

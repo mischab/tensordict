@@ -83,11 +83,8 @@ jobs:
         $HOME/miniconda/bin/conda create --name build_binary python=${{ matrix.python-version }}
         $HOME/miniconda/bin/conda info
         $HOME/miniconda/bin/activate build_binary
-    - name: check python version
-      run: |
-        python --version
-    - name: Check git version
-      run: git version
+    - name: Setup git
+      run: git config --global --add safe.directory /__w/tensordict/tensordict
     - name: setup Path
       run: |
         echo /usr/local/bin >> $GITHUB_PATH
